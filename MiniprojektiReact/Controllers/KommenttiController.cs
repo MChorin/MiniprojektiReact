@@ -24,7 +24,7 @@ namespace MiniprojektiReact.Controllers
         // GET: api/Kommentti
         public IQueryable<Kommentti> GetKommentti()
         {
-            return db.Kommentti;
+            return db.Kommentti.OrderByDescending(pvm => pvm.Aikaleima);
         }
 
         // GET: api/Kommentti/5
