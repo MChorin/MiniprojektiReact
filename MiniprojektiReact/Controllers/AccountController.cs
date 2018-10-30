@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Http.Cors;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -12,6 +13,8 @@ using MiniprojektiReact.Models;
 
 namespace MiniprojektiReact.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+
     [Authorize]
     public class AccountController : Controller
     {

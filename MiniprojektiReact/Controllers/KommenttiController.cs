@@ -7,11 +7,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using MiniprojektiReact.Models;
 
 namespace MiniprojektiReact.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+
     public class KommenttiController : ApiController
     {
         private MPdbModel db = new MPdbModel();
@@ -82,7 +85,7 @@ namespace MiniprojektiReact.Controllers
 
             kommentti.Aikaleima = DateTime.Now;
             kommentti.Kayttaja_id = 1; //kunnes identifiointi toimii
-            //kommentti.OnkoKuva
+            kommentti.OnkoKuva = false;
             //update paikka-tauluun kommenttien määrä ja summa
 
             if (!ModelState.IsValid)
