@@ -22,23 +22,23 @@ namespace MiniprojektiReact.Controllers
         }
 
         // GET: api/Kommentti
-        public IQueryable<Kommentti> GetKommentti()
+        public IQueryable<Kommentti> GetKommentti(int paikka_id)
         {
-            return db.Kommentti.OrderByDescending(pvm => pvm.Aikaleima);
+            return db.Kommentti.OrderByDescending(pvm => pvm.Aikaleima).Where(a => a.Paikka_id == paikka_id);
         }
 
         // GET: api/Kommentti/5
-        [ResponseType(typeof(Kommentti))]
-        public IHttpActionResult GetKommentti(int id)
-        {
-            Kommentti kommentti = db.Kommentti.Find(id);
-            if (kommentti == null)
-            {
-                return NotFound();
-            }
+        //[ResponseType(typeof(Kommentti))]
+        //public IHttpActionResult GetKommentti(int id)
+        //{
+        //    Kommentti kommentti = db.Kommentti.Find(id);
+        //    if (kommentti == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(kommentti);
-        }
+        //    return Ok(kommentti);
+        //}
 
         // PUT: api/Kommentti/5
         [ResponseType(typeof(void))]
@@ -79,12 +79,34 @@ namespace MiniprojektiReact.Controllers
         [ResponseType(typeof(Kommentti))]
         public IHttpActionResult PostKommentti(Kommentti kommentti)
         {
+
+            kommentti.Aikaleima = DateTime.Now;
+            kommentti.Kayttaja_id = 1; //kunnes identifiointi toimii
+            //kommentti.OnkoKuva
+            //update paikka-tauluun kommenttien määrä ja summa
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
             db.Kommentti.Add(kommentti);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                if (KommenttiExists(kommentti.Kommentti_id))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = kommentti.Kommentti_id }, kommentti);
