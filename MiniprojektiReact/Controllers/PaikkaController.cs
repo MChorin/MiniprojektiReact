@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using GoogleMaps.LocationServices;
+using Microsoft.AspNet.Identity;
 using MiniprojektiReact.Models;
 
 namespace MiniprojektiReact.Controllers
@@ -70,6 +71,7 @@ namespace MiniprojektiReact.Controllers
 
         // PUT: api/Paikka/5
         [ResponseType(typeof(void))]
+        [Authorize]
         public IHttpActionResult PutPaikka(int id, Paikka paikka)
         {
             if (!ModelState.IsValid)
@@ -105,17 +107,19 @@ namespace MiniprojektiReact.Controllers
 
         // POST: api/Paikka
         [ResponseType(typeof(Paikka))]
+        [Authorize]
         public IHttpActionResult PostPaikka(Paikka paikka)
         {
             //var location = new GoogleLocationService();
             //var point = location.GetLatLongFromAddress(paikka.Kaupunki + ", " + paikka.Maa);
 
-            paikka.Kayttaja_id = 1; //kunnes identifikointi toimii
+            paikka.Kayttaja_id = User.Identity.GetUserId<int>(); //kunnes identifikointi toimii
             paikka.KommenttienMaara = 0;
             paikka.ArvostelujenSumma = 0;
             //paikka.Longitude = point.Latitude; //ehkä toimii... :D
             //paikka.Latitude = point.Longitude; 
-
+            
+          
             paikka.Longitude = null;
             paikka.Latitude = null;
 
@@ -147,6 +151,7 @@ namespace MiniprojektiReact.Controllers
 
         // DELETE: api/Paikka/5
         [ResponseType(typeof(Paikka))]
+        [Authorize]
         public IHttpActionResult DeletePaikka(int id)
         {
             Paikka paikka = db.Paikka.Find(id);
