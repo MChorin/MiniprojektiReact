@@ -7,10 +7,10 @@
 <h2>View</h2>
 
 
-@using (Html.BeginForm("Kommentti", "api", FormMethod.Post))
+@using (Html.BeginForm("Index","Kommentti", FormMethod.Post)) 
 {
     @Html.AntiForgeryToken()
-
+    
     <div class="form-horizontal">
         <h4>Kommentti</h4>
         <hr />
@@ -24,20 +24,20 @@
         </div>
 
         @*<div class="form-group">
-                @Html.LabelFor(model => model.Paikka_id, "Paikka_id", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("Paikka_id", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Paikka_id, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
+            @Html.LabelFor(model => model.Paikka_id, "Paikka_id", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Paikka_id", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Paikka_id, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
         @*<div class="form-group">
-                @Html.LabelFor(model => model.Kuvat, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Kuvat, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Kuvat, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
+            @Html.LabelFor(model => model.Kuvat, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Kuvat, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Kuvat, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Teksti, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -48,22 +48,22 @@
         </div>
 
         @*<div class="form-group">
-                @Html.LabelFor(model => model.Aikaleima, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Aikaleima, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Aikaleima, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
+            @Html.LabelFor(model => model.Aikaleima, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Aikaleima, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Aikaleima, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
         @*<div class="form-group">
-                @Html.LabelFor(model => model.OnkoKuva, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <div class="checkbox">
-                        @Html.EditorFor(model => model.OnkoKuva)
-                        @Html.ValidationMessageFor(model => model.OnkoKuva, "", new { @class = "text-danger" })
-                    </div>
+            @Html.LabelFor(model => model.OnkoKuva, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.OnkoKuva)
+                    @Html.ValidationMessageFor(model => model.OnkoKuva, "", new { @class = "text-danger" })
                 </div>
-            </div>*@
+            </div>
+        </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Arvosana, htmlAttributes: new { @class = "control-label col-md-2" })

@@ -24,25 +24,52 @@ namespace MiniprojektiReact.Controllers
             db.Configuration.ProxyCreationEnabled = false;
         }
 
-        // GET: api/Kommentti
-        public IQueryable<Kommentti> GetKommentti(int paikka_id)
+        //GET: api/Kommentti
+        public IQueryable<Kommentti> GetKommentti()
         {
-            return db.Kommentti.OrderByDescending(pvm => pvm.Aikaleima).Where(a => a.Paikka_id == paikka_id);
+            return db.Kommentti.OrderByDescending(pvm => pvm.Aikaleima).Take(100);
         }
+
+
 
         // GET: api/Kommentti/5
         //[ResponseType(typeof(Kommentti))]
-        //public IHttpActionResult GetKommentti(int id)
-        //{
+        public IQueryable<Kommentti> GetKommentti(int id)
+        {
         //    Kommentti kommentti = db.Kommentti.Find(id);
         //    if (kommentti == null)
         //    {
         //        return NotFound();
         //    }
 
-        //    return Ok(kommentti);
-        //}
+           return db.Kommentti.Where(a => a.Paikka_id == id).OrderByDescending(pvm => pvm.Aikaleima).Take(100);
+        }
 
+// GET: api/Kommentti/5
+//[ResponseType(typeof(Kommentti))]
+//[ActionName("paikkaID")]
+//        //[ResponseType(typeof(IEnumerable<Kommentti>))]
+//        public IEnumerable<Kommentti> GetPaikkaKommentti(int id)
+//        {
+//            //List<Kommentti> kommentit = new List<Kommentti>();
+
+//            IEnumerable<Kommentti> kommentit = db.Kommentti.Where(a => a.Paikka_id == id).OrderByDescending(pvm => pvm.Aikaleima);
+
+//            //foreach(var jotain in haetut)
+//            //{
+//            //    kommentit.Add(jotain);
+//            //}
+
+//            //if (kommentit is null)
+//            //{
+//            //    return NotFound();
+//            //}
+
+//            return kommentit;
+
+//        }
+                
+                
         // PUT: api/Kommentti/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutKommentti(int id, Kommentti kommentti)
@@ -86,14 +113,22 @@ namespace MiniprojektiReact.Controllers
             kommentti.Aikaleima = DateTime.Now;
             kommentti.Kayttaja_id = 1; //kunnes identifiointi toimii
             kommentti.OnkoKuva = false;
+          //  kommentti.Paikka_id = 3; tulee 
             //update paikka-tauluun kommenttien määrä ja summa
+            
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            
+            Paikka paikka = db.Paikka.Find(kommentti.Paikka_id);
+            db.Paikka.Attach(paikka);
+            paikka.KommenttienMaara = paikka.KommenttienMaara + 1;
+            paikka.ArvostelujenSumma = paikka.ArvostelujenSumma + kommentti.Arvosana;
             db.Kommentti.Add(kommentti);
+
             try
             {
                 db.SaveChanges();
@@ -109,8 +144,6 @@ namespace MiniprojektiReact.Controllers
                     throw;
                 }
             }
-
-            db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = kommentti.Kommentti_id }, kommentti);
         }

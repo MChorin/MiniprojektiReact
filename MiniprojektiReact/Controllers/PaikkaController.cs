@@ -27,7 +27,9 @@ namespace MiniprojektiReact.Controllers
         public IQueryable<Paikka> GetPaikka()
 
         {
-            return db.Paikka;
+
+
+            return db.Paikka.OrderByDescending(a=> (a.ArvostelujenSumma / a.KommenttienMaara)).Take(100);
         }
 
         // GET: api/Paikka/5
@@ -42,6 +44,24 @@ namespace MiniprojektiReact.Controllers
 
             return Ok(paikka);
         }
+
+        //GET Kaupungilla: api/paikka/kaupunki/{kaupungin nimi} (eli hakuehto= kaupungin nimi)
+        [ResponseType(typeof(IEnumerable<Paikka>))]
+        public IHttpActionResult GetPaikkaKaupunki(string hakuehto)
+        {
+           IEnumerable<Paikka> paikat = db.Paikka.Where(t => t.Kaupunki == hakuehto).OrderByDescending(a => (a.ArvostelujenSumma / a.KommenttienMaara)).Take(100);
+
+            if (paikat is null)
+            {
+                return NotFound();
+            }
+
+
+
+            return Ok(paikat);
+        }
+
+
 
         // PUT: api/Paikka/5
         [ResponseType(typeof(void))]
@@ -82,13 +102,34 @@ namespace MiniprojektiReact.Controllers
         [ResponseType(typeof(Paikka))]
         public IHttpActionResult PostPaikka(Paikka paikka)
         {
+            paikka.Kayttaja_id = 1; //kunnes identifikointi toimii
+            paikka.KommenttienMaara = 0;
+            paikka.ArvostelujenSumma = 0;
+            paikka.Longitude = null; //kuka hakee?
+            paikka.Latitude = null; //kuka hakee?
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
             db.Paikka.Add(paikka);
-            db.SaveChanges();
+         
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                if (PaikkaExists(paikka.Paikka_id))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return CreatedAtRoute("DefaultApi", new { id = paikka.Paikka_id }, paikka);
         }
