@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MiniprojektiReact.Models
@@ -79,6 +80,10 @@ namespace MiniprojektiReact.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Käyttäjätunnus")]
+        public string Kayttajanimi { get; set; }
     }
 
     public class ResetPasswordViewModel

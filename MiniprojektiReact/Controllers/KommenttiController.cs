@@ -9,12 +9,13 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
+using Microsoft.AspNet.Identity;
 using MiniprojektiReact.Models;
 
 namespace MiniprojektiReact.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-
+    
     public class KommenttiController : ApiController
     {
         private MPdbModel db = new MPdbModel();
@@ -25,6 +26,7 @@ namespace MiniprojektiReact.Controllers
         }
 
         //GET: api/Kommentti
+        [AllowAnonymous]
         public IQueryable<Kommentti> GetKommentti()
         {
             return db.Kommentti.OrderByDescending(pvm => pvm.Aikaleima).Take(100);
@@ -34,6 +36,7 @@ namespace MiniprojektiReact.Controllers
 
         // GET: api/Kommentti/5
         //[ResponseType(typeof(Kommentti))]
+        [AllowAnonymous]
         public IQueryable<Kommentti> GetKommentti(int id)
         {
         //    Kommentti kommentti = db.Kommentti.Find(id);
@@ -72,6 +75,7 @@ namespace MiniprojektiReact.Controllers
                 
         // PUT: api/Kommentti/5
         [ResponseType(typeof(void))]
+        [Authorize]
         public IHttpActionResult PutKommentti(int id, Kommentti kommentti)
         {
             if (!ModelState.IsValid)
@@ -107,13 +111,15 @@ namespace MiniprojektiReact.Controllers
 
         // POST: api/Kommentti
         [ResponseType(typeof(Kommentti))]
+        [Authorize]
         public IHttpActionResult PostKommentti(Kommentti kommentti)
         {
 
             kommentti.Aikaleima = DateTime.Now;
-            kommentti.Kayttaja_id = 1; //kunnes identifiointi toimii
+            var id = User.Identity.GetUserId();
+            kommentti.Kayttaja_id = User.Identity.GetUserId<int>(); //kunnes identifiointi toimii
             kommentti.OnkoKuva = false;
-          //  kommentti.Paikka_id = 3; tulee 
+           kommentti.Paikka_id = 3; 
             //update paikka-tauluun kommenttien määrä ja summa
             
 
@@ -150,6 +156,7 @@ namespace MiniprojektiReact.Controllers
 
         // DELETE: api/Kommentti/5
         [ResponseType(typeof(Kommentti))]
+        [Authorize]
         public IHttpActionResult DeleteKommentti(int id)
         {
             Kommentti kommentti = db.Kommentti.Find(id);
