@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
+using GoogleMaps.LocationServices;
 using MiniprojektiReact.Models;
 
 namespace MiniprojektiReact.Controllers
@@ -27,9 +28,13 @@ namespace MiniprojektiReact.Controllers
         public IQueryable<Paikka> GetPaikka()
 
         {
+            //IEnumerable<Paikka> paikat = db.Paikka;
+            //foreach(var jotain in paikat)
+            //{
+            //    float ka = ((float)jotain.ArvostelujenSumma / jotain.KommenttienMaara);
+            //}
 
-
-            return db.Paikka.OrderByDescending(a=> (a.ArvostelujenSumma / a.KommenttienMaara)).Take(100);
+            return db.Paikka.OrderByDescending(a=> ((float)a.ArvostelujenSumma / a.KommenttienMaara)).Take(100);
         }
 
         // GET: api/Paikka/5
@@ -102,11 +107,17 @@ namespace MiniprojektiReact.Controllers
         [ResponseType(typeof(Paikka))]
         public IHttpActionResult PostPaikka(Paikka paikka)
         {
+            //var location = new GoogleLocationService();
+            //var point = location.GetLatLongFromAddress(paikka.Kaupunki + ", " + paikka.Maa);
+
             paikka.Kayttaja_id = 1; //kunnes identifikointi toimii
             paikka.KommenttienMaara = 0;
             paikka.ArvostelujenSumma = 0;
-            paikka.Longitude = null; //kuka hakee?
-            paikka.Latitude = null; //kuka hakee?
+            //paikka.Longitude = point.Latitude; //ehkä toimii... :D
+            //paikka.Latitude = point.Longitude; 
+
+            paikka.Longitude = null;
+            paikka.Latitude = null;
 
             if (!ModelState.IsValid)
             {
