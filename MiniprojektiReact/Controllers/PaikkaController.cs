@@ -26,16 +26,28 @@ namespace MiniprojektiReact.Controllers
         }
 
         // GET: api/Paikka
-        public IQueryable<Paikka> GetPaikka()
-
+        public List<Paikka> GetPaikka()
         {
-            //IEnumerable<Paikka> paikat = db.Paikka;
-            //foreach(var jotain in paikat)
-            //{
-            //    float ka = ((float)jotain.ArvostelujenSumma / jotain.KommenttienMaara);
-            //}
+            List<Paikka> lähetettävät = new List<Paikka>();
 
-            return db.Paikka.OrderByDescending(a=> ((float)a.ArvostelujenSumma / a.KommenttienMaara)).Take(100);
+            IQueryable<Paikka> paikat = db.Paikka;
+            foreach (var paik in paikat)
+            {
+                if (paik.KommenttienMaara == 0)
+                {
+                    paik.KommenttienMaara = 1;
+                    lähetettävät.Add(paik);
+                }
+
+                else
+                {
+                    lähetettävät.Add(paik);
+                }
+
+            }
+            List<Paikka> pois = new List<Paikka>(lähetettävät.OrderByDescending(a => ((float)a.ArvostelujenSumma / a.KommenttienMaara)).Take(100));
+
+            return pois;
         }
 
         // GET: api/Paikka/5
@@ -55,23 +67,39 @@ namespace MiniprojektiReact.Controllers
         [ResponseType(typeof(IEnumerable<Paikka>))]
         public IHttpActionResult GetPaikkaKaupunki(string hakuehto)
         {
-           IEnumerable<Paikka> paikat = db.Paikka.Where(t => t.Kaupunki == hakuehto).OrderByDescending(a => (a.ArvostelujenSumma / a.KommenttienMaara)).Take(100);
+            List<Paikka> lähetettävät = new List<Paikka>();
+
+            IQueryable<Paikka> paikat = db.Paikka.Where(a => (a.Kaupunki == hakuehto));
+            foreach (var paik in paikat)
+            {
+                if (paik.KommenttienMaara == 0)
+                {
+                    paik.KommenttienMaara = 1;
+                    lähetettävät.Add(paik);
+                }
+
+                else
+                {
+                    lähetettävät.Add(paik);
+                }
+
+            }
+
+            //IEnumerable<Paikka> paikat = db.Paikka.Where(t => t.Kaupunki == hakuehto).OrderByDescending(a => ((float)a.ArvostelujenSumma / (a.KommenttienMaara.GetValue())).Take(100);
 
             if (paikat is null)
             {
                 return NotFound();
             }
 
-
-
-            return Ok(paikat);
+            return Ok(lähetettävät.OrderByDescending(a => ((float)a.ArvostelujenSumma / a.KommenttienMaara)).Take(100));
         }
 
 
 
         // PUT: api/Paikka/5
         [ResponseType(typeof(void))]
-        [Authorize]
+        //[Authorize]
         public IHttpActionResult PutPaikka(int id, Paikka paikka)
         {
             if (!ModelState.IsValid)
@@ -107,19 +135,19 @@ namespace MiniprojektiReact.Controllers
 
         // POST: api/Paikka
         [ResponseType(typeof(Paikka))]
-        [Authorize]
+        // [Authorize]
         public IHttpActionResult PostPaikka(Paikka paikka)
         {
             //var location = new GoogleLocationService();
             //var point = location.GetLatLongFromAddress(paikka.Kaupunki + ", " + paikka.Maa);
-
-            paikka.Kayttaja_id = User.Identity.GetUserId<int>(); //kunnes identifikointi toimii
+            paikka.Kayttaja_id = 1;
+            // paikka.Kayttaja_id = User.Identity.GetUserId<int>(); //kunnes identifikointi toimii
             paikka.KommenttienMaara = 0;
             paikka.ArvostelujenSumma = 0;
             //paikka.Longitude = point.Latitude; //ehkä toimii... :D
             //paikka.Latitude = point.Longitude; 
-            
-          
+
+
             paikka.Longitude = null;
             paikka.Latitude = null;
 
@@ -129,7 +157,7 @@ namespace MiniprojektiReact.Controllers
             }
 
             db.Paikka.Add(paikka);
-         
+
             try
             {
                 db.SaveChanges();
@@ -151,7 +179,7 @@ namespace MiniprojektiReact.Controllers
 
         // DELETE: api/Paikka/5
         [ResponseType(typeof(Paikka))]
-        [Authorize]
+        // [Authorize]
         public IHttpActionResult DeletePaikka(int id)
         {
             Paikka paikka = db.Paikka.Find(id);
