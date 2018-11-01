@@ -111,7 +111,7 @@ namespace MiniprojektiReact.Controllers
 
         // POST: api/Kommentti
         [ResponseType(typeof(Kommentti))]
-        [Authorize]
+        //[Authorize]
         public IHttpActionResult PostKommentti(Kommentti kommentti)
         {
 
@@ -119,7 +119,7 @@ namespace MiniprojektiReact.Controllers
             var id = User.Identity.GetUserId();
             kommentti.Kayttaja_id = User.Identity.GetUserId<int>(); //kunnes identifiointi toimii
             kommentti.OnkoKuva = false;
-           kommentti.Paikka_id = 3; 
+           kommentti.Paikka_id = kommentti.Paikka_id; 
             //update paikka-tauluun kommenttien määrä ja summa
             
 

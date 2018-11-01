@@ -107,14 +107,14 @@ namespace MiniprojektiReact.Controllers
 
         // POST: api/Paikka
         [ResponseType(typeof(Paikka))]
-        [Authorize]
+        //[Authorize]
         public IHttpActionResult PostPaikka(Paikka paikka)
         {
             //var location = new GoogleLocationService();
             //var point = location.GetLatLongFromAddress(paikka.Kaupunki + ", " + paikka.Maa);
 
             paikka.Kayttaja_id = User.Identity.GetUserId<int>(); //kunnes identifikointi toimii
-            paikka.KommenttienMaara = 0;
+            paikka.KommenttienMaara = 1;
             paikka.ArvostelujenSumma = 0;
             //paikka.Longitude = point.Latitude; //ehkä toimii... :D
             //paikka.Latitude = point.Longitude; 
