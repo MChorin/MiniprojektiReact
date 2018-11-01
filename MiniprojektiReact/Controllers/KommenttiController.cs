@@ -116,10 +116,10 @@ namespace MiniprojektiReact.Controllers
         {
 
             kommentti.Aikaleima = DateTime.Now;
-            var id = User.Identity.GetUserId();
-            kommentti.Kayttaja_id = User.Identity.GetUserId<int>(); //kunnes identifiointi toimii
+            //var id = User.Identity.GetUserId();
+            kommentti.Kayttaja_id = 1; //kunnes identifiointi toimii
             kommentti.OnkoKuva = false;
-           kommentti.Paikka_id = kommentti.Paikka_id; 
+            //kommentti.Paikka_id = 3; 
             //update paikka-tauluun kommenttien määrä ja summa
             
 

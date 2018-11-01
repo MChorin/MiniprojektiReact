@@ -13,7 +13,7 @@ namespace MiniprojektiReact.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201810311405594_Kayttajanimi"; }
+            get { return "201810311443107_Kayttajanimi"; }
         }
         
         string IMigrationMetadata.Source
